@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import TaskModal from './Components/TaskModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from './Components/BottomNavigation';
+// import Notifications from './Services/Notifications';
 // import { StatusBar } from 'expo-status-bar';
+// import BackgroundJobs from './Services/Background';
 
 interface Task {
     id?: null|number;
@@ -114,6 +116,7 @@ function App() {
                 closeModal={() => {
                     setEditTask({});
                     setIsTaskModal(false);
+                    // BackgroundJobs.closeService()
                 }}
             />
 
