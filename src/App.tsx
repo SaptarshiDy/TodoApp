@@ -8,6 +8,8 @@ import BottomNavigation from './Components/BottomNavigation';
 // import { StatusBar } from 'expo-status-bar';
 // import BackgroundJobs from './Services/Background';
 
+import { useAppDispatch, useAppSelector } from './redux/hooks/index';
+
 interface Task {
     id?: null|number;
     title: null|string;
@@ -16,7 +18,9 @@ interface Task {
 
 function App() {
 
-    const [tasks, setTasks] = useState([]);
+    // const [tasks, setTasks] = useState([]);
+    const tasks = useAppSelector(state => state.tasks);
+
     const [editTask, setEditTask] = useState({});
     const [isTaskModal, setIsTaskModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -57,76 +61,77 @@ function App() {
     }
 
     return (
-        <View style={styles.container}>
-            
-            {
-                isLoading ? 
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
-                    <ActivityIndicator size="large" color="#5452bf" />
-                </View>
-                :
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, marginVertical: 10}}>
-                    {
-                        (tasks.length !== 0) ?
-                            
-                                <ScrollView
-                                    showsVerticalScrollIndicator={false} 
-                                    contentContainerStyle={{ flexGrow: 1, }}
-                                >
-                                    {[...tasks].sort((a, b) => b.id - a.id).map((task) => (
-                                        <TaskBox
-                                            key={task.id}
-                                            task={task}
-                                            onEditTask={(data: number) => {
-                                                const task = tasks.find(item => item.id === data);
-                                                setEditTask(task);
-                                                setIsTaskModal(true);
-                                            }}
-                                            onDeleteTask={(data: null|number) => {
-                                                const updatedTasks = tasks.filter(item => item.id !== data);
-                                                setTasks(updatedTasks);
-                                            }}
-                                        />
-                                    ))}
-                                </ScrollView>
-                            :
-                            <Text style={{ fontSize: 26 }}>
-                                No Task Found
-                            </Text>
-                    }
-                </View>
-            }
-            
 
-            <TaskModal
-                task={editTask}
-                isModal={isTaskModal}
-                onCreateTask={(data: Task) => {
-                    data.id = (tasks.length !== 0) ? tasks[tasks.length - 1].id + 1 : 1;
-                    setTasks((prevForm) => ([...prevForm, data]));
-                }}
-                onEditTask={(data: Task) => {
-                    const updateTask = tasks.map(item =>
-                        item.id === data.id ? {
-                            ...item, title: data.title, subtitle: data.subtitle
-                        } : item
-                    );
-                    setTasks(updateTask);
-                }}
-                closeModal={() => {
-                    setEditTask({});
-                    setIsTaskModal(false);
-                    // BackgroundJobs.closeService()
-                }}
-            />
+            <View style={styles.container}>
+                
+                {
+                    isLoading ? 
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
+                        <ActivityIndicator size="large" color="#5452bf" />
+                    </View>
+                    :
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, marginVertical: 10}}>
+                        {
+                            (tasks.length !== 0) ?
+                                
+                                    <ScrollView
+                                        showsVerticalScrollIndicator={false} 
+                                        contentContainerStyle={{ flexGrow: 1, }}
+                                    >
+                                        {[...tasks].sort((a, b) => b.id - a.id).map((task) => (
+                                            <TaskBox
+                                                key={task.id}
+                                                task={task}
+                                                onEditTask={(data: number) => {
+                                                    const task = tasks.find(item => item.id === data);
+                                                    setEditTask(task);
+                                                    setIsTaskModal(true);
+                                                }}
+                                                onDeleteTask={(data: null|number) => {
+                                                    const updatedTasks = tasks.filter(item => item.id !== data);
+                                                    setTasks(updatedTasks);
+                                                }}
+                                            />
+                                        ))}
+                                    </ScrollView>
+                                :
+                                <Text style={{ fontSize: 26 }}>
+                                    No Task Found
+                                </Text>
+                        }
+                    </View>
+                }
+                
 
-            <BottomNavigation
-                onCreateTaskModal={() => {
-                    setIsTaskModal(true);
-                }}
-            />
+                <TaskModal
+                    task={editTask}
+                    isModal={isTaskModal}
+                    onCreateTask={(data: Task) => {
+                        data.id = (tasks.length !== 0) ? tasks[tasks.length - 1].id + 1 : 1;
+                        setTasks((prevForm) => ([...prevForm, data]));
+                    }}
+                    onEditTask={(data: Task) => {
+                        const updateTask = tasks.map(item =>
+                            item.id === data.id ? {
+                                ...item, title: data.title, subtitle: data.subtitle
+                            } : item
+                        );
+                        setTasks(updateTask);
+                    }}
+                    closeModal={() => {
+                        setEditTask({});
+                        setIsTaskModal(false);
+                        // BackgroundJobs.closeService()
+                    }}
+                />
 
-        </View>
+                <BottomNavigation
+                    onCreateTaskModal={() => {
+                        setIsTaskModal(true);
+                    }}
+                />
+
+            </View>      
     );
 }
 
