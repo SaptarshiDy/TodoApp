@@ -9,6 +9,7 @@ import BottomNavigation from './Components/BottomNavigation';
 // import BackgroundJobs from './Services/Background';
 
 import { useAppDispatch, useAppSelector } from './redux/hooks/index';
+import { createTask, updateTask, setTasks } from './redux/slices/tasks/index';
 
 interface Task {
     id?: null|number;
@@ -25,40 +26,61 @@ function App() {
     const [isTaskModal, setIsTaskModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const dispatch = useAppDispatch();
+
     useEffect(() => {
         getDataFromLocalStorage();
+        // setDataOnLocalStorage();
         // AppState.addEventListener('change', handleAppStateChange);
         // return () => {
         //     AppState.addEventListener('change', handleAppStateChange);
         // }
     }, []);
 
-    useEffect(() => {
-        setDataOnLocalStorage();
-    }, [tasks]);
+    // useEffect(() => {
+    //     setDataOnLocalStorage();
+    // }, [tasks]);
 
     const handleAppStateChange = (nextAppState: string) => {
         if (nextAppState === 'inactive' || nextAppState === 'background') {
-            setDataOnLocalStorage();
+            // setDataOnLocalStorage();
         }
     };
 
-    const setDataOnLocalStorage = async() => {
-        const value = JSON.stringify(tasks);
-        await AsyncStorage.setItem(
-            '_storedList',
-            value
-        );
-    }
+    // const setDataOnLocalStorage = async() => {
+    //     // const value = JSON.stringify(tasks);
+    //     // await AsyncStorage.setItem(
+    //     //     '_storedList',
+    //     //     value
+    //     // );
+
+    //     await AsyncStorage.setItem(
+    //         '_storedList',
+    //         JSON.stringify([
+    //             {
+    //                 id: 1,
+    //                 title: 'Hello From Redux !',
+    //                 subtitle: 'Hi',
+    //             }
+    //         ])
+    //     );
+    // }
 
     const getDataFromLocalStorage = async() => {
         setIsLoading(true);
         const value = await AsyncStorage.getItem('_storedList');
-        if (value) setTasks(JSON.parse(value));
+        if (value) setTasks(JSON.parse(value)); dispatch(setTasks(JSON.parse(value)));
         setTimeout(function() {
             setIsLoading(false);
         }, 1000);
     }
+
+    /**
+     * Convert Create To Redux
+     * Convert Delete To Redux
+     * Convert Edit To Redux
+     * Go with View...
+    */
 
     return (
 

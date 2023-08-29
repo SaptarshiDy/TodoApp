@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define a type for the slice state
 interface CounterState {
-    value: Array|Object;
+    value: Array<Object>|Object;
 }
 
 const getDataFromLocalStorage = async() => {
@@ -19,34 +19,37 @@ const getDataFromLocalStorage = async() => {
 }
 
 // Define the initial state using that type
-const initialState: CounterState = {
-    value: getDataFromLocalStorage(),
-}
+// const initialState: CounterState = {
+//     value: [],
+// }
 
 export const tasksSlice = createSlice({
     name: 'tasks',
     // `createSlice` will infer the state type from the `initialState` argument
-    initialState,
+    initialState: [],
     reducers: {
-        taskCreate: (state) => {
-            state.value += 1
+        createTask: (state) => {
+            []
         },
-        taskUpdate: (state) => {
-            state.value -= 1
+        updateTask: (state) => {
+            []
         },
-        taskDelete: (state) => {
-            state.value -= 1
+        deleteTask: (state) => {
+            []
         },
+        setTasks: (state, value) => {
+            return value.payload;
+        }
         // Use the PayloadAction type to declare the contents of `action.payload`
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
-        },
+        // incrementByAmount: (state, action: PayloadAction<number>) => {
+        //     state.value += action.payload
+        // },
     },
 })
 
-export const { taskCreate, taskUpdate, taskDelete, incrementByAmount } = tasksSlice.actions
+export const { createTask, updateTask, deleteTask, setTasks } = tasksSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value
+// export const selectCount = (state: RootState) => state.counter.value
 
 export default tasksSlice.reducer
