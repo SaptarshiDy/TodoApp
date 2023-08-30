@@ -9,7 +9,7 @@ import BottomNavigation from './Components/BottomNavigation';
 // import BackgroundJobs from './Services/Background';
 
 import { useAppDispatch, useAppSelector } from './redux/hooks/index';
-import { createTask, updateTask, setTasks } from './redux/slices/tasks/index';
+import { createTask, updateTask, deleteTask, getTasks } from './redux/slices/tasks/index';
 
 interface Task {
     id?: null|number;
@@ -30,16 +30,12 @@ function App() {
 
     useEffect(() => {
         getDataFromLocalStorage();
-        // setDataOnLocalStorage();
-        // AppState.addEventListener('change', handleAppStateChange);
-        // return () => {
-        //     AppState.addEventListener('change', handleAppStateChange);
-        // }
+        // clearDataFromLocalStorage();
     }, []);
 
-    // useEffect(() => {
-    //     setDataOnLocalStorage();
-    // }, [tasks]);
+    useEffect(() => {
+        setDataOnLocalStorage();
+    }, [tasks]);
 
     const handleAppStateChange = (nextAppState: string) => {
         if (nextAppState === 'inactive' || nextAppState === 'background') {
@@ -47,32 +43,28 @@ function App() {
         }
     };
 
-    // const setDataOnLocalStorage = async() => {
-    //     // const value = JSON.stringify(tasks);
-    //     // await AsyncStorage.setItem(
-    //     //     '_storedList',
-    //     //     value
-    //     // );
-
-    //     await AsyncStorage.setItem(
-    //         '_storedList',
-    //         JSON.stringify([
-    //             {
-    //                 id: 1,
-    //                 title: 'Hello From Redux !',
-    //                 subtitle: 'Hi',
-    //             }
-    //         ])
-    //     );
-    // }
+    const setDataOnLocalStorage = async() => {
+        const value = JSON.stringify(tasks);
+        await AsyncStorage.setItem(
+            '_storedList',
+            value
+        );
+    };
 
     const getDataFromLocalStorage = async() => {
         setIsLoading(true);
         const value = await AsyncStorage.getItem('_storedList');
-        if (value) setTasks(JSON.parse(value)); dispatch(setTasks(JSON.parse(value)));
+        if (value) dispatch(getTasks(JSON.parse(value)));
         setTimeout(function() {
             setIsLoading(false);
         }, 1000);
+    }
+
+    const clearDataFromLocalStorage = async() => {
+        await AsyncStorage.setItem(
+            '_storedList',
+            JSON.stringify([])
+        );
     }
 
     /**
@@ -85,7 +77,6 @@ function App() {
     return (
 
             <View style={styles.container}>
-                
                 {
                     isLoading ? 
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
@@ -110,8 +101,7 @@ function App() {
                                                     setIsTaskModal(true);
                                                 }}
                                                 onDeleteTask={(data: null|number) => {
-                                                    const updatedTasks = tasks.filter(item => item.id !== data);
-                                                    setTasks(updatedTasks);
+                                                    dispatch(deleteTask(data));
                                                 }}
                                             />
                                         ))}
@@ -130,20 +120,16 @@ function App() {
                     isModal={isTaskModal}
                     onCreateTask={(data: Task) => {
                         data.id = (tasks.length !== 0) ? tasks[tasks.length - 1].id + 1 : 1;
-                        setTasks((prevForm) => ([...prevForm, data]));
+                        dispatch(createTask(data));
                     }}
                     onEditTask={(data: Task) => {
-                        const updateTask = tasks.map(item =>
-                            item.id === data.id ? {
-                                ...item, title: data.title, subtitle: data.subtitle
-                            } : item
-                        );
-                        setTasks(updateTask);
+                        dispatch(updateTask(data));
+                        setEditTask({});
+                        setIsTaskModal(false);
                     }}
                     closeModal={() => {
                         setEditTask({});
                         setIsTaskModal(false);
-                        // BackgroundJobs.closeService()
                     }}
                 />
 
