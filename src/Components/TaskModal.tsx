@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal, KeyboardAvoidingView, TextInput, TextArea } from 'react-native';
 import React,{ useState, useEffect } from 'react';
-import Icon from 'react-native-vector-icons/AntDesign';
 
 interface Props {
     task: Form|object;
