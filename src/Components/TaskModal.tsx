@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal, KeyboardAvoidingView, TextInput, TextArea } from 'react-native';
 import React,{ useState, useEffect } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 interface Props {
     task: Form|object;
