@@ -112,6 +112,7 @@ const TaskModal = ({task, isModal, onCreateTask, onEditTask, closeModal} : Props
                                             title: null,
                                             subtitle: null,
                                         }));
+                                        setEditModal(false);
                                         closeModal();
                                     }} 
                                     style={[styles.modalButton, {backgroundColor: '#5452bf'}]} 

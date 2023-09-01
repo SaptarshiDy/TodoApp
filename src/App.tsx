@@ -25,6 +25,7 @@ function App() {
                     <Stack.Screen 
                         name="TaskView"
                         component={TaskView}
+                        options={{ title: 'Task Details', headerTitleAlign: 'left' }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>

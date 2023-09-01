@@ -9,8 +9,14 @@ const TaskView = ({ route } : Props) => {
     const { task } = route.params;
     return (
         <View style={styles.container}>
-            <Text>
+            <Text style={styles.title}>
                 {task.title}
+            </Text>
+
+            <View style={{borderTopWidth: 0.5, borderColor: '#dbdbdb'}}></View>
+
+            <Text style={styles.subtitle}>
+                {task.subtitle}
             </Text>
         </View>
     );
@@ -20,8 +26,19 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 14,
+        gap: 4,
+    },
+    title: {
+        fontSize: 22,
+        paddingVertical: 4,
+        color: '#5452bf',
+        fontWeight: 'bold',
+    },
+    subtitle: {
+        fontSize: 16,
+        paddingVertical: 4,
+        color: '#5452bf',
     },
 });
 
