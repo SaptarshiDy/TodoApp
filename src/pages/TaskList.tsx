@@ -70,6 +70,19 @@ function App({navigation}) {
     return (
 
             <View style={styles.container}>
+
+                <View style={{width: '100%', paddingHorizontal: 20}}>
+                    <View style={{marginTop: 14, padding: 14, backgroundColor: '#fff', borderRadius: 4, shadowColor: '#000', shadowOffset: {
+            width: 0,
+            height: 2,
+        }, shadowOpacity: 0.25,
+        shadowRadius: 4, elevation: 8,}}>
+                        <Text>
+                            Search Your Task . . .
+                        </Text>
+                    </View>
+                </View>
+
                 {
                     isLoading ? 
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
