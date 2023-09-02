@@ -31,7 +31,7 @@ export const tasksSlice = createSlice({
         updateTask: (state: Array<Task>, value) => {
             let data = value.payload;
             let index = state.findIndex((x => x.id == data.id));
-            if (index) {
+            if (index != null) {
                 state[index].title = data.title;
                 state[index].subtitle = data.subtitle;
             }

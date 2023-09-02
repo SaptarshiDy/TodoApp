@@ -12,10 +12,10 @@ import { Provider } from 'react-redux';
 //     )
 // ));
 
-const AppRoot = () => (
-    <Provider store={store}>
-        <App />
-    </Provider>
-);
+// const AppRoot = () => (
+//     <Provider store={store}>
+//         <App />
+//     </Provider>
+// );
 
-AppRegistry.registerComponent(appName, () => AppRoot);
+AppRegistry.registerComponent(appName, () => App);
