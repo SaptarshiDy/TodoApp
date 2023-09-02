@@ -2,8 +2,10 @@ import { StyleSheet, Text, View, ActivityIndicator, ScrollView, Button, AppState
 import TaskBox from '../components/TaskBox';
 import { useState, useEffect } from 'react';
 import TaskModal from '../components/TaskModal';
+import SearchBar from '../components/SearchBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomNavigation from '../components/BottomNavigation';
+
 // import Notifications from './Services/Notifications';
 // import { StatusBar } from 'expo-status-bar';
 // import BackgroundJobs from './Services/Background';
@@ -11,21 +13,21 @@ import BottomNavigation from '../components/BottomNavigation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks/index';
 import { createTask, updateTask, deleteTask, getTasks } from '../redux/slices/tasks/index';
 
+import { useNavigation } from '@react-navigation/native';
+
 interface Task {
     id?: null|number;
     title: null|string;
     subtitle: null|string;
 }
 
-function App({navigation}) {
+function App() {
 
-    // const [tasks, setTasks] = useState([]);
     const tasks = useAppSelector(state => state.tasks);
-
     const [editTask, setEditTask] = useState({});
     const [isTaskModal, setIsTaskModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigation = useNavigation();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -70,6 +72,9 @@ function App({navigation}) {
     return (
 
             <View style={styles.container}>
+
+                <SearchBar navigation={navigation} />
+
                 {
                     isLoading ? 
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%'}}>
@@ -85,11 +90,13 @@ function App({navigation}) {
                                         contentContainerStyle={{ flexGrow: 1, }}
                                     >
                                         {[...tasks].sort((a, b) => b.id - a.id).map((task) => (
-                                            <TouchableOpacity onPress={() => {
-                                                navigation.navigate('TaskView', {task: task});
-                                            }}>
+                                            <TouchableOpacity 
+                                                key={task.id}
+                                                onPress={() => {
+                                                    navigation.navigate('TaskView', {task: task});
+                                                }}
+                                            >
                                                 <TaskBox
-                                                    key={task.id}
                                                     task={task}
                                                     onEditTask={(data: number) => {
                                                         const task = tasks.find(item => item.id === data);
