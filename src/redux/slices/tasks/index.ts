@@ -25,10 +25,11 @@ export const tasksSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState: [],
     reducers: {
-        createTask: (state: Array<Task>, value) => {
+        createTask: (state: any, value) => {
+            value.payload.id = (state && state.length !== 0) ? state[state.length - 1].id + 1 : 1;
             return [...state, value.payload];
         },
-        updateTask: (state: Array<Task>, value) => {
+        updateTask: (state: any, value) => {
             let data = value.payload;
             let index = state.findIndex((x => x.id == data.id));
             if (index != null) {
@@ -37,7 +38,7 @@ export const tasksSlice = createSlice({
             }
             return state;
         },
-        deleteTask: (state: Array<Task>, value) => {
+        deleteTask: (state: any, value) => {
             return state.filter(item => item.id !== value.payload);
         },
         getTasks: (state, value) => {
