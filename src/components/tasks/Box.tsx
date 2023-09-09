@@ -9,8 +9,6 @@ interface Props {
 
 const TaskBox = ({ task, onEditTask, onDeleteTask } : Props) => {
 
-    const [deleteTaskId, setDeleteTaskId] = useState(null);
-
     return (
         <View style={styles.box}>
             <Text style={styles.title} numberOfLines={1}>
@@ -30,67 +28,12 @@ const TaskBox = ({ task, onEditTask, onDeleteTask } : Props) => {
                     <Text style={{color: 'white', fontSize: 16}}>Task Edit</Text>
                 </Pressable>
                 <Pressable 
-                    onPress={() => {
-                        setDeleteTaskId(task.id)
-                    }} 
+                    onPress={() => onDeleteTask(task.id)} 
                     style={[styles.button, {backgroundColor: '#f72c2c'}]}
                 >
                     <Text style={{color: 'white', fontSize: 16}}>Delete</Text>
                 </Pressable>
             </View>
-
-            {/* Delete Modal */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={deleteTaskId ? true : false}
-                onRequestClose={() => {
-                    setDeleteTaskId(null);
-                }}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalView}>
-
-                        <Text style={{width: '100%', fontSize: 22}}>
-                            Are you sure ?
-                        </Text>
-
-                        <Text style={{width: '100%', fontSize: 16, marginBottom: 20, marginTop: 10}}>
-                            You want to delete this task, Note data will deleted permanently.
-                        </Text>
-
-                        <View style={{flexDirection: 'row', gap: 8}}>
-                            
-
-                            <TouchableOpacity 
-                                onPress={() => {
-                                    setDeleteTaskId(null);
-                                }} 
-                                style={[styles.modalButton, {backgroundColor: '#f72c2c'}]}
-                            >
-                                <Text style={styles.buttonText}>
-                                    Close
-                                </Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity 
-                                onPress={() => {
-                                    onDeleteTask(deleteTaskId);
-                                    setDeleteTaskId(null);
-                                }} 
-                                style={[styles.modalButton, {backgroundColor: '#5452bf'}]} 
-                                >
-                                <Text style={styles.buttonText}>
-                                    Delete Task
-                                </Text>
-                            </TouchableOpacity>
-
-                        </View>
-
-                    </View>
-                </View>
-            </Modal>
-            {/* End */}
-
         </View>
     );
 
